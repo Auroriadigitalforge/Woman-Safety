@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - Women Safety</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <main class="auth-page">
+        <h1>Register</h1>
+        <form id="registerForm">
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" required />
+
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required />
+
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" required />
+
+            <button type="submit">Create Account</button>
+        </form>
+        <p id="authMessage" aria-live="polite"></p>
+        <p>Already have an account? <a href="login.html">Login</a></p>
+        <p><a href="login.html">Go to login</a></p>
+    </main>
+    <script>
+        const registerForm = document.getElementById("registerForm");
+        const authMessage = document.getElementById("authMessage");
+
+        registerForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const name = document.getElementById("name").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+            const submitBtn = registerForm.querySelector("button[type='submit']");
+
+            if (submitBtn) {
+                submitBtn.dataset.originalText = submitBtn.textContent;
+                submitBtn.textContent = "Creating...";
+                submitBtn.disabled = true;
+                submitBtn.classList.add("is-loading");
+            }
+
+            try {
+                const response = await fetch("api/auth.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ action: "register", name, email, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.ok) {
+                    authMessage.textContent = data.message || "Registration failed.";
+                    return;
+                }
+
+                authMessage.textContent = "Registration successful. Redirecting to login...";
+                window.setTimeout(() => {
+                    window.location.href = "login.html";
+                }, 800);
+            } catch (error) {
+                authMessage.textContent = "Unable to register. Please try again.";
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove("is-loading");
+                    submitBtn.textContent = submitBtn.dataset.originalText || "Create Account";
+                }
+            }
+        });
+    </script>
+</body>
+</html>

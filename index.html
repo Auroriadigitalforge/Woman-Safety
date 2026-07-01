@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helping-Code | Women's Safety</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.20.0/dist/tf.min.js" defer></script>
+    <script src="script.js" defer></script>
+    <script src="js/acoustic-detector.js" defer></script>
+    <script src="js/voice-trigger.js" defer></script>
+    <script src="js/ai-guardian.js" defer></script>
+</head>
+<body>
+
+<header>
+    <div class="logo">HELPING-CODE</div>
+    <div class="top-actions" aria-label="Header actions">
+        <a class="menu-icon brand-link" href="brand.html">Brand & Reviews</a>
+        <span id="currentUserLabel" class="menu-icon user-pill"></span>
+        <button id="logoutBtn" type="button" class="menu-icon logout-btn">Logout</button>
+    </div>
+</header>
+
+<div class="container">
+    
+    <section class="sos-container">
+        <div class="sos-shell">
+            <button id="sosBtn" class="sos-button" type="button" aria-describedby="sosHoldHint" aria-live="polite">
+                <span class="sos-button-label">SOS</span>
+                <span class="sos-progress" aria-hidden="true"></span>
+            </button>
+            <p id="sosHoldHint" class="sos-hint">Press and hold for 3 seconds to activate the emergency alert.</p>
+            <p id="sosStatus" class="sos-status" aria-live="polite"></p>
+        </div>
+        <button id="locationBtn">Share Location</button>
+        <p id="locationText" class="location-text">Location not shared yet.</p>
+    </section>
+
+    <div class="features-grid">
+        <div class="card">
+            <span style="font-size: 1.5rem;">📍</span>
+            <h3>Share Location</h3>
+        </div>
+        <div class="card">
+            <span style="font-size: 1.5rem;">📞</span>
+            <h3>Fake Call</h3>
+        </div>
+    </div>
+
+    <section class="guardian-section">
+        <h2 class="section-title">AI Guardian</h2>
+        <p class="guardian-description">
+            Uses on-device AI to listen for screams, shouts, sirens, or gunshots and can
+            auto-trigger SOS. You'll always get a 30-second countdown to cancel before an
+            alert is sent, except when you confirm on purpose with your code word.
+        </p>
+
+        <div class="guardian-toggle-row">
+            <label class="switch">
+                <input type="checkbox" id="guardianToggle">
+                <span class="switch-slider" aria-hidden="true"></span>
+            </label>
+            <span>Enable AI Guardian (sound detection)</span>
+            <span id="guardianStatus" class="guardian-status guardian-status--neutral">Off</span>
+        </div>
+
+        <div class="guardian-codeword-row">
+            <label for="guardianCodeWord">Voice code word (say it 3x in a row for instant alert)</label>
+            <input type="text" id="guardianCodeWord" placeholder="e.g. pineapple emergency" autocomplete="off">
+            <button id="guardianSaveCodeWord" type="button">Save</button>
+        </div>
+        <p id="guardianCodeWordFeedback" class="guardian-feedback" aria-live="polite"></p>
+        <p class="guardian-privacy-note">
+            Note: scream/sound detection runs fully on your device. The voice code-word
+            feature uses your browser's speech recognition, which in most browsers sends
+            audio to a cloud service to produce a transcript.
+        </p>
+    </section>
+
+    <section class="contacts-section">
+        <h2 class="section-title">Emergency Contacts</h2>
+        <input type="text" id="contactNameInput" placeholder="Enter name" autocomplete="name">
+        <input type="tel" id="contactInput" placeholder="Enter number" autocomplete="tel">
+        <p id="contactError" class="input-error" aria-live="polite"></p>
+        <button id="saveContact" type="button">Save</button>
+        <ul id="contactList"></ul>
+
+        <div class="contact-row">
+            <div class="contact-info">
+                <b>Local Police</b>
+                <span>100 / 112</span>
+            </div>
+            <a href="#" class="call-icon" data-number="100 / 112">📞</a>
+        </div>
+    </section>
+
+    <button id="fakeCallBtn" type="button">Fake Call</button>
+
+    <div id="fakeCallScreen" class="fake-call-screen" aria-hidden="true" hidden>
+        <div class="fake-call-panel" role="dialog" aria-modal="true" aria-labelledby="fakeCallTitle">
+            <p class="fake-call-label">Incoming Call</p>
+            <h2 id="fakeCallTitle">Unknown Caller</h2>
+            <p id="fakeCallSubtitle" class="fake-call-subtitle">Ringing...</p>
+
+            <div id="incomingCallActions" class="fake-call-actions">
+                <button id="acceptFakeCallBtn" type="button" class="accept-btn">Accept</button>
+                <button id="declineFakeCallBtn" type="button" class="decline-btn">Decline</button>
+            </div>
+
+            <div id="activeCallState" class="active-call-state" hidden>
+                <p>Call connected</p>
+                <button id="endFakeCallBtn" type="button" class="end-call-btn">End Call</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="outgoingCallModal" class="call-modal" aria-hidden="true" hidden>
+    <div class="call-modal-card" role="dialog" aria-modal="true" aria-labelledby="callingTitle">
+        <p class="call-modal-label">Outgoing Call</p>
+        <h3 id="callingTitle">Calling...</h3>
+        <p id="callingName" class="call-modal-name">Unknown contact</p>
+        <p id="callingNumber" class="call-modal-number">Unknown number</p>
+        <button id="endOutgoingCallBtn" type="button">End Call</button>
+    </div>
+</div>
+
+<div id="failsafeModal" class="failsafe-modal" aria-hidden="true" hidden>
+    <div class="failsafe-card" role="alertdialog" aria-modal="true" aria-labelledby="failsafeTitle">
+        <p class="failsafe-label">⚠️ AI Guardian Alert</p>
+        <h3 id="failsafeTitle">Possible emergency detected</h3>
+        <p id="failsafeReasonText" class="failsafe-reason"></p>
+        <div class="failsafe-countdown" aria-live="assertive">
+            <span id="failsafeCountdownValue">30</span>
+            <span class="failsafe-countdown-unit">seconds until SOS is sent</span>
+        </div>
+        <p class="failsafe-hint">If this is a false alarm, tap cancel now.</p>
+        <button id="failsafeCancelBtn" type="button" class="failsafe-cancel-btn">I'm okay — Cancel Alert</button>
+    </div>
+</div>
+
+</body>
+</html>

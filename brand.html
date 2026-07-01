@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helping-code | Woman Safety Service</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body.brand-page {
+            background:
+                radial-gradient(circle at 10% 18%, rgba(255, 92, 79, 0.26), transparent 28%),
+                radial-gradient(circle at 85% 10%, rgba(255, 176, 84, 0.22), transparent 28%),
+                linear-gradient(180deg, #fff8f6 0%, #f3f6ff 100%);
+        }
+
+        .brand-stage {
+            width: min(100% - 24px, 1080px);
+            margin: clamp(16px, 4vh, 36px) auto 28px;
+            display: grid;
+            grid-template-columns: 1fr;
+            border-radius: 28px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.65);
+            box-shadow: 0 20px 50px rgba(16, 24, 40, 0.16);
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(8px);
+        }
+
+        .brand-side {
+            background: linear-gradient(150deg, #ff5347 0%, #ff7d57 46%, #ffb347 100%);
+            color: #fff;
+            padding: 24px;
+            display: grid;
+            gap: 14px;
+        }
+
+        .brand-side h1 {
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            font-weight: 900;
+        }
+
+        .brand-side p {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .brand-pill-list {
+            list-style: none;
+            display: grid;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .brand-pill-list li {
+            background: rgba(255, 255, 255, 0.22);
+            border: 1px solid rgba(255, 255, 255, 0.34);
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            width: fit-content;
+        }
+
+        .brand-content {
+            background: rgba(255, 255, 255, 0.92);
+            padding: 20px;
+        }
+
+        .brand-wrap {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .brand-wrap .brand-hero {
+            border-radius: 20px;
+            margin-bottom: 14px;
+            box-shadow: none;
+        }
+
+        .brand-wrap .review-box {
+            border-radius: 20px;
+            margin-top: 0;
+            box-shadow: none;
+        }
+
+        @media (min-width: 920px) {
+            .brand-stage {
+                grid-template-columns: 0.92fr 1.1fr;
+                margin-top: 52px;
+            }
+
+            .brand-side {
+                padding: 34px;
+                gap: 18px;
+            }
+
+            .brand-content {
+                padding: 34px;
+            }
+        }
+    </style>
+    <script src="script.js" defer></script>
+</head>
+<body class="brand-page">
+<header>
+    <div class="logo">HELPING-CODE</div>
+    <div class="top-actions" aria-label="Header actions">
+        <a class="menu-icon brand-link" href="index.html">Back to Safety App</a>
+        <span id="currentUserLabel" class="menu-icon user-pill"></span>
+        <button id="logoutBtn" type="button" class="menu-icon logout-btn">Logout</button>
+    </div>
+</header>
+
+<section class="brand-stage" aria-label="Brand and review page">
+    <aside class="brand-side">
+        <h1>Helping-code | Woman Safety Service</h1>
+        <p>
+            Stay protected with fast SOS support, location sharing, and safety-first tools.
+            Your feedback makes this safety platform stronger for every user.
+        </p>
+        <ul class="brand-pill-list">
+            <li>Safe and simple rating flow</li>
+            <li>Owner-only review controls</li>
+            <li>Reliable emergency-first design</li>
+        </ul>
+    </aside>
+
+    <div class="brand-content">
+        <main class="brand-wrap">
+            <section class="brand-hero">
+                <h1>Rate Your Experience</h1>
+                <p>
+                    Share what worked well and what can be improved. Honest reviews help us deliver better safety support.
+                </p>
+            </section>
+
+            <section class="review-box">
+                <h2 class="section-title">Rate Us (5-Star Review System)</h2>
+                <div id="starRating" class="stars" aria-label="5 star rating">
+                    <span class="star" data-value="1">★</span>
+                    <span class="star" data-value="2">★</span>
+                    <span class="star" data-value="3">★</span>
+                    <span class="star" data-value="4">★</span>
+                    <span class="star" data-value="5">★</span>
+                </div>
+
+                <textarea id="reviewText" placeholder="Write your review..."></textarea>
+                <button id="reviewSubmit">Submit Review</button>
+                <button id="cancelEditReview" hidden>Cancel Edit</button>
+
+                <p id="reviewSummary" class="review-summary">No reviews yet.</p>
+                <ul id="reviewList" class="review-list"></ul>
+            </section>
+        </main>
+    </div>
+</section>
+</body>
+</html>
