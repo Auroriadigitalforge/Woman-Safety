@@ -1,3 +1,7 @@
+![Status](https://img.shields.io/badge/STATUS-DEVELOPMENT-red)
+# Status Note
+## This repository is currently under active development. The stable, live-deployed version of this project, featuring functional WhatsApp, SMS, and Call flows, can be viewed at: [Helping-Code](https://helpingcode.free.nf/)
+
 # Helping-Code | Women's Safety Service
 
 A browser-based women safety web app with emergency tools, AI-assisted distress detection, account authentication, and review management.
