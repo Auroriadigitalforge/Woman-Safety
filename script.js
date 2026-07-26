@@ -173,6 +173,60 @@ function resetSosHold(showHint = true) {
     }
 }
 
+// Helper function to send WhatsApp Emergency Alert
+// Helper function to send WhatsApp Emergency Alert with Live Google Maps Location
+function triggerWhatsAppEmergencyAlert() {
+    if (!contacts || contacts.length === 0) {
+        console.warn("No emergency contacts saved for WhatsApp alert.");
+        return;
+    }
+
+    const primaryContact = contacts[0].number;
+    const cleanedNumber = primaryContact.replace(/[^0-9+]/g, "");
+
+    if (!cleanedNumber) {
+        return;
+    }
+
+    // Open blank window immediately to bypass pop-up blockers on mobile/desktop
+    const waWindow = window.open("", "_blank");
+
+    if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const lat = position.coords.latitude.toFixed(6);
+                const lon = position.coords.longitude.toFixed(6);
+                
+                // Google Maps link with exact GPS coordinates
+                const mapsUrl = `https://maps.google.com/?q=${lat},${lon}`;
+                
+                const message = `🚨 *EMERGENCY SOS ALERT!* 🚨\n\nI am in danger and need urgent help!\n\n📍 *My Current Location:* \n${mapsUrl}`;
+
+                if (waWindow) {
+                    waWindow.location.href = `https://wa.me/${cleanedNumber}?text=${encodeURIComponent(message)}`;
+                }
+            },
+            (error) => {
+                // Fallback message if GPS permission is denied or unavailable
+                const message = `🚨 *EMERGENCY SOS ALERT!* 🚨\n\nI am in danger and need urgent help! Please contact me or reach my location immediately.`;
+                if (waWindow) {
+                    waWindow.location.href = `https://wa.me/${cleanedNumber}?text=${encodeURIComponent(message)}`;
+                }
+            },
+            { 
+                enableHighAccuracy: true, // Forces phone hardware GPS for precise accuracy
+                timeout: 8000, 
+                maximumAge: 0 
+            }
+        );
+    } else {
+        const message = `🚨 *EMERGENCY SOS ALERT!* 🚨\n\nI am in danger and need urgent help! Please contact me immediately.`;
+        if (waWindow) {
+            waWindow.location.href = `https://wa.me/${cleanedNumber}?text=${encodeURIComponent(message)}`;
+        }
+    }
+}
+
 function runEmergencyProtocol(reason = "manual") {
     setSosProgress(100);
 
@@ -184,6 +238,8 @@ function runEmergencyProtocol(reason = "manual") {
 
     setSosHint(reasonLabels[reason] || reasonLabels.manual);
 
+    triggerWhatsAppEmergencyAlert();
+
     window.setTimeout(() => {
         alert("🚨 SOS Activated! Help is on the way.");
     }, 0);
@@ -191,8 +247,6 @@ function runEmergencyProtocol(reason = "manual") {
     window.dispatchEvent(new CustomEvent("emergency-protocol-activated", { detail: { reason } }));
 }
 
-// Exposed so other modules (e.g. AI Guardian acoustic/voice detection) can
-// trigger the same emergency flow as the manual hold-to-activate button.
 window.activateEmergencyProtocol = runEmergencyProtocol;
 
 function triggerSosAlert() {
@@ -228,7 +282,7 @@ function startSosHold(event) {
         try {
             sosBtn.setPointerCapture(event.pointerId);
         } catch (error) {
-            // Ignore capture failures on browsers that do not support it reliably.
+            // Ignore capture failures on unsupported browsers
         }
     }
 
@@ -393,7 +447,7 @@ function displayContacts() {
         callButton.className = "call-saved-contact";
         callButton.textContent = "Call";
         callButton.addEventListener("click", () => {
-            showOutgoingCall(contact.name || "Saved Contact", contact.number || "Unknown number");
+            makeActualPhoneCall(contact.name || "Saved Contact", contact.number || "");
         });
 
         const deleteButton = document.createElement("button");
@@ -447,9 +501,21 @@ if (saveContact && contactInput && contactNameInput) {
 
 displayContacts();
 
+// Function to trigger real telephone call via native dialer
+function makeActualPhoneCall(name, number) {
+    const cleanedNumber = String(number).replace(/[^0-9+]/g, "");
+
+    // Trigger visual pop-up modal
+    showOutgoingCall(name, number);
+
+    // Trigger device's real phone dialer
+    if (cleanedNumber) {
+        window.location.href = `tel:${cleanedNumber}`;
+    }
+}
+
 function showOutgoingCall(name, number) {
     if (!outgoingCallModal || !callingName || !callingNumber) {
-        alert(`Calling ${name} - ${number}...`);
         return;
     }
 
@@ -474,7 +540,9 @@ const callIcons = document.querySelectorAll(".call-icon");
 callIcons.forEach((icon) => {
     icon.addEventListener("click", (event) => {
         event.preventDefault();
-        showOutgoingCall(icon.dataset.name || "Local Police", icon.dataset.number || "Unknown number");
+        const name = icon.dataset.name || "Emergency Service";
+        const number = icon.dataset.number || "112";
+        makeActualPhoneCall(name, number);
     });
 });
 
