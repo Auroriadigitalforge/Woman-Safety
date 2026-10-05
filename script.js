@@ -38,6 +38,7 @@ const currentUserLabel = document.getElementById("currentUserLabel");
 
 const REVIEWS_API_URL = "api/reviews_api.php";
 let selectedRating = 0;
+<<<<<<< HEAD
 let reviews = loadStoredArray("reviews");
 
 function loadStoredArray(key) {
@@ -49,6 +50,9 @@ function loadStoredArray(key) {
         return [];
     }
 }
+=======
+let reviews = JSON.parse(localStorage.getItem("reviews")) || [];
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
 
 function getCurrentUser() {
     try {
@@ -81,7 +85,10 @@ let sosHoldTriggered = false;
 let sosHoldStart = 0;
 let sosHoldTimeoutId = null;
 let sosHoldFrameId = null;
+<<<<<<< HEAD
 let sosWhatsAppWindow = null;
+=======
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
 let activeFakeCaller = "Unknown Caller";
 let ringtoneContext = null;
 let ringtoneIntervalId = null;
@@ -172,11 +179,14 @@ function resetSosHold(showHint = true) {
 
     sosHoldActive = false;
 
+<<<<<<< HEAD
     if (!sosHoldTriggered && sosWhatsAppWindow) {
         sosWhatsAppWindow.close();
         sosWhatsAppWindow = null;
     }
 
+=======
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
     if (sosBtn) {
         sosBtn.classList.remove("is-holding");
     }
@@ -198,7 +208,11 @@ function triggerWhatsAppEmergencyAlert() {
     }
 
     const primaryContact = contacts[0].number;
+<<<<<<< HEAD
     const cleanedNumber = normalizeWhatsAppNumber(primaryContact);
+=======
+    const cleanedNumber = primaryContact.replace(/[^0-9+]/g, "");
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
 
     if (!cleanedNumber) {
         return;
@@ -216,7 +230,11 @@ function triggerWhatsAppEmergencyAlert() {
                 // Google Maps link with exact GPS coordinates
                 const mapsUrl = `https://maps.google.com/?q=${lat},${lon}`;
                 
+<<<<<<< HEAD
                 const message = `*EMERGENCY SOS ALERT*\n\nI am in danger and need urgent help!\n\n*My Current Location:*\n${mapsUrl}`;
+=======
+                const message = `🚨 *EMERGENCY SOS ALERT!* 🚨\n\nI am in danger and need urgent help!\n\n📍 *My Current Location:* \n${mapsUrl}`;
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
 
                 if (waWindow) {
                     waWindow.location.href = `https://wa.me/${cleanedNumber}?text=${encodeURIComponent(message)}`;
@@ -224,7 +242,11 @@ function triggerWhatsAppEmergencyAlert() {
             },
             (error) => {
                 // Fallback message if GPS permission is denied or unavailable
+<<<<<<< HEAD
                 const message = `*EMERGENCY SOS ALERT*\n\nI am in danger and need urgent help! Please contact me or reach my location immediately.`;
+=======
+                const message = `🚨 *EMERGENCY SOS ALERT!* 🚨\n\nI am in danger and need urgent help! Please contact me or reach my location immediately.`;
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
                 if (waWindow) {
                     waWindow.location.href = `https://wa.me/${cleanedNumber}?text=${encodeURIComponent(message)}`;
                 }
@@ -236,13 +258,18 @@ function triggerWhatsAppEmergencyAlert() {
             }
         );
     } else {
+<<<<<<< HEAD
         const message = `*EMERGENCY SOS ALERT*\n\nI am in danger and need urgent help! Please contact me immediately.`;
+=======
+        const message = `🚨 *EMERGENCY SOS ALERT!* 🚨\n\nI am in danger and need urgent help! Please contact me immediately.`;
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
         if (waWindow) {
             waWindow.location.href = `https://wa.me/${cleanedNumber}?text=${encodeURIComponent(message)}`;
         }
     }
 }
 
+<<<<<<< HEAD
 function normalizeWhatsAppNumber(number) {
     let digits = String(number || "").replace(/\D/g, "");
     if (digits.length === 11 && digits.startsWith("0")) {
@@ -251,6 +278,8 @@ function normalizeWhatsAppNumber(number) {
     return digits.length === 10 ? `91${digits}` : digits;
 }
 
+=======
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
 function runEmergencyProtocol(reason = "manual") {
     setSosProgress(100);
 
@@ -262,6 +291,7 @@ function runEmergencyProtocol(reason = "manual") {
 
     setSosHint(reasonLabels[reason] || reasonLabels.manual);
 
+<<<<<<< HEAD
     // Use enhanced emergency handler if available, otherwise fallback to legacy method
     if (window.emergencyHandler && typeof window.emergencyHandler.triggerEmergency === 'function') {
         const whatsappWindow = reason === "manual" ? sosWhatsAppWindow : null;
@@ -271,6 +301,9 @@ function runEmergencyProtocol(reason = "manual") {
         // Fallback to legacy WhatsApp alert
         triggerWhatsAppEmergencyAlert();
     }
+=======
+    triggerWhatsAppEmergencyAlert();
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
 
     window.setTimeout(() => {
         alert("🚨 SOS Activated! Help is on the way.");
@@ -310,10 +343,13 @@ function startSosHold(event) {
     sosHoldTriggered = false;
     sosHoldStart = performance.now();
 
+<<<<<<< HEAD
     // Reserve the popup while the pointer gesture is active. The emergency
     // action itself runs after the three-second hold and may lose activation.
     sosWhatsAppWindow = window.open("about:blank", "_blank");
 
+=======
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
     if (sosBtn.setPointerCapture && typeof event.pointerId === "number") {
         try {
             sosBtn.setPointerCapture(event.pointerId);
@@ -425,7 +461,11 @@ if (locationBtn && locationText) {
 }
 
 function loadContacts() {
+<<<<<<< HEAD
     const storedContacts = loadStoredArray("contacts");
+=======
+    const storedContacts = JSON.parse(localStorage.getItem("contacts")) || [];
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
 
     return storedContacts
         .map((contact) => {
@@ -433,16 +473,23 @@ function loadContacts() {
                 return { name: "Saved Contact", number: contact };
             }
 
+<<<<<<< HEAD
             if (!contact || typeof contact !== "object") {
                 return null;
             }
 
+=======
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
             return {
                 name: String(contact.name || "Saved Contact").trim(),
                 number: String(contact.number || "").trim()
             };
         })
+<<<<<<< HEAD
         .filter((contact) => contact && contact.number);
+=======
+        .filter((contact) => contact.number);
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
 }
 
 function saveContacts() {
@@ -478,9 +525,13 @@ function displayContacts() {
         const listItem = document.createElement("li");
 
         const info = document.createElement("span");
+<<<<<<< HEAD
         const name = document.createElement("strong");
         name.textContent = contact.name;
         info.append(name, document.createTextNode(` - ${contact.number}`));
+=======
+        info.innerHTML = `<strong>${contact.name}</strong> - ${contact.number}`;
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
 
         const actions = document.createElement("span");
 
@@ -870,7 +921,11 @@ async function loadReviews() {
         localStorage.setItem("reviews", JSON.stringify(reviews));
     } catch (error) {
         isGlobalReviewMode = false;
+<<<<<<< HEAD
         reviews = normalizeReviews(loadStoredArray("reviews"));
+=======
+        reviews = normalizeReviews(JSON.parse(localStorage.getItem("reviews")) || []);
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
         localStorage.setItem("reviews", JSON.stringify(reviews));
         if (reviewSummary) {
             reviewSummary.textContent = "Offline mode: showing local reviews only.";

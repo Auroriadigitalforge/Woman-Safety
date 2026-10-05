@@ -15,7 +15,10 @@ const YAMNET_CLASS_MAP_URL =
     "https://raw.githubusercontent.com/tensorflow/models/master/research/audioset/yamnet/yamnet_class_map.csv";
 const YAMNET_SAMPLE_RATE = 16000;
 const YAMNET_WINDOW_SECONDS = 1.0; // one inference pass per ~1s of audio
+<<<<<<< HEAD
 const TFJS_SCRIPT_URL = "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.20.0/dist/tf.min.js";
+=======
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
 
 // Display names (as they appear in AudioSet) that indicate a possible
 // distress / emergency event. Tune per false-positive tolerance.
@@ -67,12 +70,17 @@ class AcousticDetector {
 
     async _ensureModelLoaded() {
         if (this.model && this.classNames) {
+<<<<<<< HEAD
             return true;
+=======
+            return;
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
         }
 
         this.onStatus("loading-model");
 
         if (typeof tf === "undefined") {
+<<<<<<< HEAD
             if (!navigator.onLine) {
                 this.onStatus("unavailable", "TensorFlow.js requires an internet connection.");
                 return false;
@@ -115,6 +123,19 @@ class AcousticDetector {
             script.onerror = () => reject(new Error("Unable to load TensorFlow.js."));
             document.head.appendChild(script);
         });
+=======
+            throw new Error("TensorFlow.js was not found on the page. Include the tfjs <script> tag before this module.");
+        }
+
+        const [model, classNames] = await Promise.all([
+            tf.loadGraphModel(YAMNET_MODEL_URL, { fromTFHub: true }),
+            AcousticDetector._loadClassMap()
+        ]);
+
+        this.model = model;
+        this.classNames = classNames;
+        this.onStatus("model-ready");
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
     }
 
     static async _loadClassMap() {
@@ -139,6 +160,7 @@ class AcousticDetector {
 
     async start() {
         if (this.isRunning) {
+<<<<<<< HEAD
             return true;
         }
 
@@ -153,6 +175,14 @@ class AcousticDetector {
             return false;
         }
 
+=======
+            return;
+        }
+
+        await this._ensureModelLoaded();
+
+        this.onStatus("requesting-microphone");
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
         this.mediaStream = await navigator.mediaDevices.getUserMedia({
             audio: {
                 echoCancellation: false,
@@ -161,6 +191,7 @@ class AcousticDetector {
             }
         });
 
+<<<<<<< HEAD
         try {
             const AudioContextClass = window.AudioContext || window.webkitAudioContext;
             if (!AudioContextClass || !window.AudioWorkletNode) {
@@ -177,10 +208,22 @@ class AcousticDetector {
             return false;
         }
         
+=======
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        this.audioContext = new AudioContextClass();
+        this.sourceNode = this.audioContext.createMediaStreamSource(this.mediaStream);
+
+        // ScriptProcessorNode is deprecated but has the broadest support for
+        // this kind of low-effort real-time tap; swap for an AudioWorklet if
+        // you need to drop legacy browser support later.
+        const bufferSize = 4096;
+        this.processorNode = this.audioContext.createScriptProcessor(bufferSize, 1, 1);
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
         this._resampleBuffer = [];
         this._resampleBufferSamples = 0;
         this._consecutiveHits = 0;
 
+<<<<<<< HEAD
         // Listen for messages from the AudioWorklet
         this.processorNode.port.onmessage = (event) => {
             try {
@@ -228,11 +271,50 @@ class AcousticDetector {
         if (this.mediaStream) {
             this.mediaStream.getTracks().forEach((track) => track.stop());
             this.mediaStream = null;
+=======
+        this.processorNode.onaudioprocess = (event) => {
+            const input = event.inputBuffer.getChannelData(0);
+            this._pushAudio(input, this.audioContext.sampleRate);
+        };
+
+        this.sourceNode.connect(this.processorNode);
+        // Necessary in most browsers to keep the processor node alive,
+        // routed to a silent gain so nothing is audibly played back.
+        const silentGain = this.audioContext.createGain();
+        silentGain.gain.value = 0;
+        this.processorNode.connect(silentGain);
+        silentGain.connect(this.audioContext.destination);
+
+        this.isRunning = true;
+        this.onStatus("listening");
+    }
+
+    stop() {
+        if (!this.isRunning) {
+            return;
+        }
+
+        if (this.processorNode) {
+            this.processorNode.disconnect();
+            this.processorNode.onaudioprocess = null;
+        }
+        if (this.sourceNode) {
+            this.sourceNode.disconnect();
+        }
+        if (this.mediaStream) {
+            this.mediaStream.getTracks().forEach((track) => track.stop());
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
         }
         if (this.audioContext && this.audioContext.state !== "closed") {
             this.audioContext.close();
         }
+<<<<<<< HEAD
         this.audioContext = null;
+=======
+
+        this.isRunning = false;
+        this.onStatus("stopped");
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
     }
 
     /** Silence the detector for `ms` milliseconds (e.g. after a confirmed/cancelled alert). */

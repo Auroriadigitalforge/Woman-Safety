@@ -13,7 +13,11 @@ The project is built with a lightweight stack (HTML/CSS/JavaScript + PHP + JSON 
 - SOS hold-to-activate button (3-second press and hold).
 - AI Guardian module with:
   - On-device acoustic threat detection using TensorFlow.js + YAMNet.
+<<<<<<< HEAD
 	- Optional voice code-word trigger (say the phrase once for instant alert).
+=======
+  - Optional voice code-word trigger (repeat phrase 3 times for instant alert).
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
   - 30-second fail-safe countdown before auto-SOS for acoustic detections.
 - Live geolocation sharing with Google Maps link.
 - Emergency contacts management (add, call simulation, delete) stored locally.
@@ -65,7 +69,11 @@ women-safety/
 4. User can activate safety features manually (SOS, location, contacts, fake call).
 5. If AI Guardian is enabled:
    - Acoustic events (scream/siren/gunshot classes) trigger a 30-second cancel window.
+<<<<<<< HEAD
 	- Confirmed voice code-word triggers immediate SOS.
+=======
+   - Confirmed voice code-word (3 repeats) triggers immediate SOS.
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
 
 ## Local Setup (XAMPP - Windows)
 

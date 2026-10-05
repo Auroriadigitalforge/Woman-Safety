@@ -7,7 +7,11 @@
  *   (window.activateEmergencyProtocol, defined in script.js).
  * - Runs the 30-second fail-safe verification countdown: an acoustic threat
  *   pauses for user confirmation before firing; a confirmed voice code-word
+<<<<<<< HEAD
  *   bypasses the countdown and fires immediately.
+=======
+ *   bypasses the countdown and fires immediately (REQ-style: 3x repeat = deliberate).
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
  */
 
 const GUARDIAN_SETTINGS_KEY = "aiGuardianSettings";
@@ -48,9 +52,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     let settings = loadGuardianSettings();
+<<<<<<< HEAD
     if (codeWordInput) {
         codeWordInput.value = settings.codeWord;
     }
+=======
+    codeWordInput.value = settings.codeWord;
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
     toggle.checked = settings.enabled;
 
     let countdownInterval = null;
@@ -94,6 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         },
         onTrigger: () => {
+<<<<<<< HEAD
             // A configured voice phrase is treated as explicit confirmation.
             closeFailsafeCountdown();
             
@@ -104,6 +113,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 window.activateEmergencyProtocol?.("voice-trigger");
             }
             
+=======
+            // Deliberate 3x repeat is treated as explicit confirmation —
+            // bypass the fail-safe countdown and fire immediately.
+            closeFailsafeCountdown();
+            window.activateEmergencyProtocol?.("voice-trigger");
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
             acousticDetector.pauseFor(POST_TRIGGER_COOLDOWN_MS);
             voiceTrigger.pauseFor(POST_TRIGGER_COOLDOWN_MS);
         }
@@ -131,6 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 countdownInterval = null;
                 countdownModal.hidden = true;
                 countdownModal.setAttribute("aria-hidden", "true");
+<<<<<<< HEAD
                 
                 // Use enhanced emergency handler
                 if (window.emergencyHandler) {
@@ -139,6 +155,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     window.activateEmergencyProtocol?.(reason);
                 }
                 
+=======
+                window.activateEmergencyProtocol?.(reason);
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
                 acousticDetector.pauseFor(POST_TRIGGER_COOLDOWN_MS);
             }
         }, 1000);
@@ -165,6 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     async function startGuardian() {
+<<<<<<< HEAD
         if (settings.codeWord) {
             voiceTrigger.start();
         }
@@ -178,6 +198,21 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (error) {
             console.error("Failed to start AI Guardian:", error);
             setStatus("Microphone/model error", "error");
+=======
+        try {
+            await acousticDetector.start();
+        } catch (error) {
+            console.error("Failed to start acoustic detector:", error);
+            setStatus("Microphone/model error", "error");
+            toggle.checked = false;
+            settings.enabled = false;
+            saveGuardianSettings(settings);
+            return;
+        }
+
+        if (settings.codeWord) {
+            voiceTrigger.start();
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
         }
     }
 
@@ -200,13 +235,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (saveCodeWordBtn) {
         saveCodeWordBtn.addEventListener("click", () => {
+<<<<<<< HEAD
             const normalized = VoiceTrigger.normalize(codeWordInput?.value || "");
+=======
+            const normalized = VoiceTrigger.normalize(codeWordInput.value || "");
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
             settings.codeWord = normalized;
             saveGuardianSettings(settings);
 
             if (codeWordFeedback) {
                 codeWordFeedback.textContent = normalized
+<<<<<<< HEAD
                     ? `Code word saved. Say "${normalized}" once to trigger an instant alert.`
+=======
+                    ? `Code word saved. Repeat "${normalized}" three times in a row to trigger an instant alert.`
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
                     : "Code word cleared.";
             }
 

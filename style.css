@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* Performance optimizations */
 @media (prefers-reduced-motion: reduce) {
 	* {
@@ -7,6 +8,9 @@
 		scroll-behavior: auto !important;
 	}
 }
+=======
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Outfit:wght@600;700;800;900&display=swap");
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
 
 :root {
 	--primary-red: #ff3b30;
@@ -1071,6 +1075,7 @@ button.is-loading::after {
 	}
 }
 
+<<<<<<< HEAD
 @keyframes pulse-emergency {
 	0%, 100% {
 		box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.7);
@@ -1097,6 +1102,8 @@ body.emergency-active {
 	}
 }
 
+=======
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
 @media (min-width: 721px) {
 	header {
 		justify-content: space-between;

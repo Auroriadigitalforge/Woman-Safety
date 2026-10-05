@@ -5,9 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Helping-Code | Women's Safety</title>
     <link rel="stylesheet" href="style.css">
+<<<<<<< HEAD
     <script src="js/performance-optimizer.js" defer></script>
     <script src="script.js" defer></script>
     <script src="js/emergency-handler.js" defer></script>
+=======
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.20.0/dist/tf.min.js" defer></script>
+    <script src="script.js" defer></script>
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
     <script src="js/acoustic-detector.js" defer></script>
     <script src="js/voice-trigger.js" defer></script>
     <script src="js/ai-guardian.js" defer></script>
@@ -53,7 +58,12 @@
         <h2 class="section-title">AI Guardian</h2>
         <p class="guardian-description">
             Uses on-device AI to listen for screams, shouts, sirens, or gunshots and can
+<<<<<<< HEAD
             auto-trigger SOS when you confirm on purpose with your code word.
+=======
+            auto-trigger SOS. You'll always get a 30-second countdown to cancel before an
+            alert is sent, except when you confirm on purpose with your code word.
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
         </p>
 
         <div class="guardian-toggle-row">
@@ -66,7 +76,11 @@
         </div>
 
         <div class="guardian-codeword-row">
+<<<<<<< HEAD
             <label for="guardianCodeWord">Voice code word (say it once for instant alert)</label>
+=======
+            <label for="guardianCodeWord">Voice code word (say it 3x in a row for instant alert)</label>
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
             <input type="text" id="guardianCodeWord" placeholder="e.g. pineapple emergency" autocomplete="off">
             <button id="guardianSaveCodeWord" type="button">Save</button>
         </div>
@@ -89,11 +103,17 @@
         <div class="contact-row">
             <div class="contact-info">
                 <b>Local Police</b>
+<<<<<<< HEAD
                 <span>100</span>
             </div>
             <a href="#" class="call-icon" data-number="100">📞
                 
             </a>
+=======
+                <span>100 / 112</span>
+            </div>
+            <a href="#" class="call-icon" data-number="100 / 112">📞</a>
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
         </div>
     </section>
 
@@ -131,7 +151,11 @@
 
 <div id="failsafeModal" class="failsafe-modal" aria-hidden="true" hidden>
     <div class="failsafe-card" role="alertdialog" aria-modal="true" aria-labelledby="failsafeTitle">
+<<<<<<< HEAD
         <p class="failsafe-label"> AI Guardian Alert</p>
+=======
+        <p class="failsafe-label">⚠️ AI Guardian Alert</p>
+>>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
         <h3 id="failsafeTitle">Possible emergency detected</h3>
         <p id="failsafeReasonText" class="failsafe-reason"></p>
         <div class="failsafe-countdown" aria-live="assertive">
