@@ -11,23 +11,15 @@
  * (e.g. @tensorflow-models/speech-commands) and restrict users to choosing
  * a code word from a supported preset list instead of free text.
  *
-<<<<<<< HEAD
- * Trigger condition: the user's configured phrase must be heard once.
-=======
  * Trigger condition: the user's configured phrase must be heard 3 times
  * in a row, each repetition within `repeatWindowMs` of the previous one.
->>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
  */
 
 class VoiceTrigger {
     /**
      * @param {Object} options
      * @param {() => string} options.getCodeWord returns the current normalized code phrase
-<<<<<<< HEAD
-    * @param {() => void} options.onTrigger called once the phrase is confirmed
-=======
      * @param {() => void} options.onTrigger called once the phrase is confirmed 3x
->>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
      * @param {(status: string, detail?: any) => void} [options.onStatus]
      * @param {number} [options.requiredRepeats]
      * @param {number} [options.repeatWindowMs] max gap allowed between repeats
@@ -36,11 +28,7 @@ class VoiceTrigger {
         this.getCodeWord = options.getCodeWord;
         this.onTrigger = options.onTrigger || (() => {});
         this.onStatus = options.onStatus || (() => {});
-<<<<<<< HEAD
-        this.requiredRepeats = options.requiredRepeats ?? 1;
-=======
         this.requiredRepeats = options.requiredRepeats ?? 3;
->>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
         this.repeatWindowMs = options.repeatWindowMs ?? 10000;
 
         this.recognition = null;
@@ -115,12 +103,9 @@ class VoiceTrigger {
             recognition.start();
             this.onStatus("listening");
         } catch (error) {
-<<<<<<< HEAD
             this.isRunning = false;
             this.recognition = null;
             recognition.onend = null;
-=======
->>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
             this.onStatus("error", error);
         }
     }

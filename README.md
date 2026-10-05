@@ -1,6 +1,4 @@
-![Status](https://img.shields.io/badge/STATUS-DEVELOPMENT-red)
-# Status Note
-## This repository is currently under active development. The stable, live-deployed version of this project, featuring functional WhatsApp, SMS, and Call flows, can be viewed at: [Helping-Code](https://helpingcode.free.nf/)
+![Status](https://img.shields.io/badge/STATUS-DEPLOYABLE-brightgreen)
 
 # Helping-Code | Women's Safety Service
 
@@ -13,11 +11,7 @@ The project is built with a lightweight stack (HTML/CSS/JavaScript + PHP + JSON 
 - SOS hold-to-activate button (3-second press and hold).
 - AI Guardian module with:
   - On-device acoustic threat detection using TensorFlow.js + YAMNet.
-<<<<<<< HEAD
-	- Optional voice code-word trigger (say the phrase once for instant alert).
-=======
   - Optional voice code-word trigger (repeat phrase 3 times for instant alert).
->>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
   - 30-second fail-safe countdown before auto-SOS for acoustic detections.
 - Live geolocation sharing with Google Maps link.
 - Emergency contacts management (add, call simulation, delete) stored locally.
@@ -69,11 +63,7 @@ women-safety/
 4. User can activate safety features manually (SOS, location, contacts, fake call).
 5. If AI Guardian is enabled:
    - Acoustic events (scream/siren/gunshot classes) trigger a 30-second cancel window.
-<<<<<<< HEAD
-	- Confirmed voice code-word triggers immediate SOS.
-=======
    - Confirmed voice code-word (3 repeats) triggers immediate SOS.
->>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
 
 ## Local Setup (XAMPP - Windows)
 
@@ -86,6 +76,15 @@ women-safety/
 5. Use `index.html` for safety tools and `brand.html` for reviews.
 
 No database setup is required. JSON files are used for persistence.
+
+## Production Deployment
+
+- Deploy the project to an Apache/PHP host; GitHub Pages cannot run the PHP APIs.
+- Use HTTPS in production so microphone and geolocation permissions work reliably.
+- Ensure `api/users.json`, `api/reviews.json`, and `data/reviews.json` are writable by PHP.
+- Keep the included `.htaccess` files enabled so JSON storage cannot be downloaded directly.
+- Start from the empty JSON data files included in this repository and create a production account through the registration page.
+- Configure the hosting provider to serve `login.html` as the application entry point, or redirect the root URL to it.
 
 ## API Reference
 

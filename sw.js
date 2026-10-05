@@ -3,19 +3,20 @@
  * Improves performance by caching static assets
  */
 
-const CACHE_VERSION = 'woman-safety-v1';
-const CRITICAL_ASSETS = [
-    '/',
-    '/index.html',
-    '/style.css',
-    '/script.js',
-    '/js/emergency-handler.js',
-    '/js/acoustic-detector.js',
-    '/js/voice-trigger.js',
-    '/js/ai-guardian.js',
-    '/js/processor.js',
-    '/js/performance-optimizer.js'
+const CACHE_VERSION = 'woman-safety-v2';
+const CRITICAL_ASSET_PATHS = [
+    '',
+    'index.html',
+    'style.css',
+    'script.js',
+    'js/emergency-handler.js',
+    'js/acoustic-detector.js',
+    'js/voice-trigger.js',
+    'js/ai-guardian.js',
+    'js/processor.js',
+    'js/performance-optimizer.js'
 ];
+const CRITICAL_ASSETS = CRITICAL_ASSET_PATHS.map((path) => new URL(path, self.registration.scope).toString());
 
 // Install Service Worker
 self.addEventListener('install', (event) => {

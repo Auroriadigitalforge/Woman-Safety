@@ -148,11 +148,7 @@ Helping-Code is a browser-based safety application. Users must register/login be
 - **REQ-009.4:** Acoustic threat shall trigger a 30-second fail-safe countdown modal before SOS activation.
 - **REQ-009.5:** User can cancel fail-safe countdown to suppress false alarms.
 - **REQ-009.6:** Voice code-word can be configured by user and saved.
-<<<<<<< HEAD
-- **REQ-009.7:** Hearing the configured code-word once shall trigger immediate SOS (bypassing countdown).
-=======
 - **REQ-009.7:** Repeating the configured code-word 3 times within time window shall trigger immediate SOS (bypassing countdown).
->>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
 - **REQ-009.8:** After trigger/cancel, detector shall apply cooldown to reduce immediate re-trigger loops.
 - **REQ-009.9:** If countdown UI is unavailable, acoustic detection path shall fail-safe by directly invoking emergency protocol.
 
@@ -315,11 +311,7 @@ women-safety/
 ### Use Case 6: Voice Code-Word Instant Trigger
 **Actor:** Authenticated user with code-word configured
 1. User saves a custom code-word phrase.
-<<<<<<< HEAD
-2. User says the configured phrase once.
-=======
 2. User repeats phrase 3 times in allowed interval.
->>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
 3. System confirms trigger and activates SOS immediately.
 
 ---
@@ -358,11 +350,7 @@ women-safety/
 - Acoustic distress detection triggers fail-safe modal.
 - Canceling fail-safe prevents emergency activation.
 - Failsafe timeout triggers emergency activation.
-<<<<<<< HEAD
-- Voice code-word triggers immediate SOS after one recognized phrase.
-=======
 - Voice code-word repeated 3 times triggers immediate SOS.
->>>>>>> 2ac7e43986c2cdbd613f006132451a40feb2d60a
 - Cooldown prevents immediate repeated trigger loops.
 - AI settings persist in localStorage across page reload.
 
