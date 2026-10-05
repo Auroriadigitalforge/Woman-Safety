@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Women Safety</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        body {
+            background:
+                radial-gradient(circle at 12% 20%, rgba(255, 92, 79, 0.28), transparent 28%),
+                radial-gradient(circle at 85% 10%, rgba(255, 176, 84, 0.24), transparent 28%),
+                linear-gradient(180deg, #fff8f6 0%, #f3f6ff 100%);
+        }
+
+        .login-stage {
+            width: min(100% - 24px, 980px);
+            margin: clamp(14px, 4vh, 36px) auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            border-radius: 28px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.65);
+            box-shadow: 0 20px 50px rgba(16, 24, 40, 0.16);
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(8px);
+        }
+
+        .login-side {
+            background: linear-gradient(150deg, #ff5347 0%, #ff7d57 46%, #ffb347 100%);
+            color: #fff;
+            padding: 24px;
+            display: grid;
+            gap: 14px;
+        }
+
+        .login-side h2 {
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            line-height: 1.1;
+            font-weight: 900;
+        }
+
+        .login-side p {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .login-pill-list {
+            list-style: none;
+            display: grid;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .login-pill-list li {
+            background: rgba(255, 255, 255, 0.22);
+            border: 1px solid rgba(255, 255, 255, 0.34);
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            width: fit-content;
+        }
+
+        .login-form-wrap {
+            background: rgba(255, 255, 255, 0.92);
+            padding: 20px;
+        }
+
+        .auth-page {
+            width: 100%;
+            margin: 0;
+            box-shadow: none;
+            border: none;
+            background: transparent;
+            padding: 0;
+        }
+
+        .auth-page h1 {
+            margin-bottom: 12px;
+        }
+
+        #authMessage {
+            min-height: 1.4em;
+        }
+
+        @media (min-width: 860px) {
+            .login-stage {
+                grid-template-columns: 0.95fr 1fr;
+                margin-top: 52px;
+            }
+
+            .login-side {
+                padding: 34px;
+                gap: 18px;
+            }
+
+            .login-form-wrap {
+                padding: 34px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="login-stage" aria-label="Login page">
+        <aside class="login-side">
+            <h2>Stay Safe.<br />Stay Connected.</h2>
+            <p>Access SOS tools, live location support, and your trusted safety network in seconds.</p>
+            <ul class="login-pill-list">
+                <li>One-tap SOS access</li>
+                <li>Quick emergency contacts</li>
+                <li>Protected review controls</li>
+            </ul>
+        </aside>
+
+        <div class="login-form-wrap">
+            <main class="auth-page">
+                <h1>Login</h1>
+                <form id="loginForm">
+                    <label for="email">Email</label>
+                    <input id="email" name="email" type="email" required />
+
+                    <label for="password">Password</label>
+                    <input id="password" name="password" type="password" required />
+
+                    <button type="submit">Login</button>
+                </form>
+                <p id="authMessage" aria-live="polite"></p>
+                <p>New here? <a href="register.html">Create account</a></p>
+                <p><a href="register.html">Go to register</a></p>
+            </main>
+        </div>
+    </section>
+    <script>
+        const loginForm = document.getElementById("loginForm");
+        const authMessage = document.getElementById("authMessage");
+
+        if (JSON.parse(localStorage.getItem("currentUser") || "null")?.id) {
+            window.location.href = "index.html";
+        }
+
+        loginForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+            const submitBtn = loginForm.querySelector("button[type='submit']");
+
+            if (submitBtn) {
+                submitBtn.dataset.originalText = submitBtn.textContent;
+                submitBtn.textContent = "Signing in...";
+                submitBtn.disabled = true;
+                submitBtn.classList.add("is-loading");
+            }
+
+            try {
+                const response = await fetch("api/auth.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ action: "login", email, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.ok || !data.user) {
+                    authMessage.textContent = data.message || "Login failed.";
+                    return;
+                }
+
+                localStorage.setItem("currentUser", JSON.stringify(data.user));
+                window.location.href = "index.html";
+            } catch (error) {
+                authMessage.textContent = "Unable to login. Please try again.";
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove("is-loading");
+                    submitBtn.textContent = submitBtn.dataset.originalText || "Login";
+                }
+            }
+        });
+    </script>
+</body>
+</html>
