@@ -58,7 +58,7 @@ function getCurrentUser() {
         }
 
         return parsed;
-    } catch (error) {
+    } catch (_error) {
         return null;
     }
 }
@@ -75,13 +75,14 @@ const userId = currentUser?.id || "";
 let activeReviewEditId = null;
 let isGlobalReviewMode = false;
 
-let contacts = loadContacts();
+const contacts = loadContacts();
 let sosHoldActive = false;
 let sosHoldTriggered = false;
 let sosHoldStart = 0;
 let sosHoldTimeoutId = null;
 let sosHoldFrameId = null;
 let sosWhatsAppWindow = null;
+let sosPointerId = null;
 let activeFakeCaller = "Unknown Caller";
 let ringtoneContext = null;
 let ringtoneIntervalId = null;
@@ -307,6 +308,7 @@ function startSosHold(event) {
     sosHoldActive = true;
     sosHoldTriggered = false;
     sosHoldStart = performance.now();
+    sosPointerId = event.pointerId;
 
     // Reserve the popup while the pointer gesture is active. The emergency
     // action itself runs after the three-second hold and may lose activation.
@@ -314,7 +316,7 @@ function startSosHold(event) {
     if (sosBtn.setPointerCapture && typeof event.pointerId === "number") {
         try {
             sosBtn.setPointerCapture(event.pointerId);
-        } catch (error) {
+        } catch (_error) {
             // Ignore capture failures on unsupported browsers
         }
     }
@@ -327,10 +329,19 @@ function startSosHold(event) {
     sosHoldFrameId = window.requestAnimationFrame(updateSosProgress);
 }
 
-function endSosHold() {
+function endSosHold(event) {
     if (!sosHoldActive && !sosHoldTriggered) {
         return;
     }
+
+    if (event && sosPointerId !== null && event.pointerId !== sosPointerId) {
+        return;
+    }
+
+    if (sosBtn?.hasPointerCapture?.(sosPointerId)) {
+        sosBtn.releasePointerCapture(sosPointerId);
+    }
+    sosPointerId = null;
 
     const wasTriggered = sosHoldTriggered;
     resetSosHold(!wasTriggered);
@@ -347,7 +358,6 @@ function endSosHold() {
 if (sosBtn) {
     sosBtn.addEventListener("pointerdown", startSosHold);
     sosBtn.addEventListener("pointerup", endSosHold);
-    sosBtn.addEventListener("pointerleave", endSosHold);
     sosBtn.addEventListener("pointercancel", endSosHold);
     sosBtn.addEventListener("contextmenu", (event) => event.preventDefault());
     setSosHint("Hold for 3 seconds to activate the emergency alert.");
@@ -836,7 +846,7 @@ async function requestReviewsApi(payload) {
     let data = null;
     try {
         data = await response.json();
-    } catch (error) {
+    } catch (_error) {
         data = null;
     }
 
@@ -864,7 +874,7 @@ async function loadReviews() {
         reviews = await requestReviewsApi();
         isGlobalReviewMode = true;
         localStorage.setItem("reviews", JSON.stringify(reviews));
-    } catch (error) {
+    } catch (_error) {
         isGlobalReviewMode = false;
         reviews = normalizeReviews(loadStoredArray("reviews"));
         localStorage.setItem("reviews", JSON.stringify(reviews));
@@ -956,7 +966,7 @@ function renderReviews() {
                     }
 
                     renderReviews();
-                } catch (error) {
+                } catch (_error) {
                     alert("Failed to delete review. Please try again.");
                 } finally {
                     setButtonLoading(deleteBtn, false);
@@ -1025,7 +1035,7 @@ if (reviewSubmit && reviewText) {
 
             resetReviewForm();
             renderReviews();
-        } catch (error) {
+        } catch (_error) {
             alert("Failed to save review. Please try again.");
         } finally {
             setButtonLoading(reviewSubmit, false);

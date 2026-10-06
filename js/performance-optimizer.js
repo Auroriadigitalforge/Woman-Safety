@@ -12,7 +12,7 @@ class PerformanceOptimizer {
     /**
      * Lazy load AI Guardian scripts when needed
      */
-    async loadAIGuardian() {
+    loadAIGuardian() {
         if (this.aiGuardianLoaded) {
             return Promise.resolve();
         }
@@ -169,10 +169,4 @@ document.addEventListener('DOMContentLoaded', () => {
     performanceOptimizer.monitorPerformance();
     performanceOptimizer.optimizeImages();
     performanceOptimizer.prefetchResources();
-});
-
-// Print performance metrics when page loads
-window.addEventListener('load', () => {
-    const metrics = performanceOptimizer.getPerformanceReport();
-    console.log('📊 Performance Metrics:', metrics);
 });

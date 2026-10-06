@@ -135,7 +135,7 @@ class EmergencyHandler {
         const cleanedNumber = this.normalizeWhatsAppNumber(contact.number);
         if (!cleanedNumber) return;
 
-        let message = this.buildEmergencyMessage(location, reason);
+        const message = this.buildEmergencyMessage(location, reason);
         
         const waUrl = `https://wa.me/${cleanedNumber}?text=${encodeURIComponent(message)}`;
         
@@ -165,7 +165,7 @@ class EmergencyHandler {
     /**
      * Initiate emergency call to a contact
      */
-    initiateCall(contact, location, reason) {
+    initiateCall(contact, _location, _reason) {
         const cleanedNumber = String(contact.number || "").replace(/\D/g, "");
         if (!cleanedNumber) return;
 

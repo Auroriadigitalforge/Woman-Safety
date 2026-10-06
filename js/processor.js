@@ -6,7 +6,7 @@ class MyProcessor extends AudioWorkletProcessor {
     this.writeIndex = 0;
   }
 
-  process(inputs, outputs, parameters) {
+  process(inputs, _outputs, _parameters) {
     try {
       const input = inputs[0];
       

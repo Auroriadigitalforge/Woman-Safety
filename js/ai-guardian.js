@@ -21,7 +21,7 @@ function loadGuardianSettings() {
             enabled: Boolean(parsed?.enabled),
             codeWord: typeof parsed?.codeWord === "string" ? parsed.codeWord : ""
         };
-    } catch (error) {
+    } catch (_error) {
         return { enabled: false, codeWord: "" };
     }
 }
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    let settings = loadGuardianSettings();
+    const settings = loadGuardianSettings();
     if (codeWordInput) {
         codeWordInput.value = settings.codeWord;
     }

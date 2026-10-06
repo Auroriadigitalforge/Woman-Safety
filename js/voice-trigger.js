@@ -88,7 +88,7 @@ class VoiceTrigger {
                 this._restartTimeout = window.setTimeout(() => {
                     try {
                         recognition.start();
-                    } catch (error) {
+                    } catch (_error) {
                         // Ignore "already started" races.
                     }
                 }, 300);

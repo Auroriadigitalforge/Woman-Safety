@@ -3,7 +3,7 @@
  * Improves performance by caching static assets
  */
 
-const CACHE_VERSION = 'woman-safety-v2';
+const CACHE_VERSION = 'woman-safety-v3';
 const CRITICAL_ASSET_PATHS = [
     '',
     'index.html',
