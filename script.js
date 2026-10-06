@@ -222,7 +222,7 @@ function triggerWhatsAppEmergencyAlert() {
                     waWindow.location.href = `https://wa.me/${cleanedNumber}?text=${encodeURIComponent(message)}`;
                 }
             },
-            (error) => {
+            () => {
                 // Fallback message if GPS permission is denied or unavailable
                 const message = `*EMERGENCY SOS ALERT*\n\nI am in danger and need urgent help! Please contact me or reach my location immediately.`;
                 if (waWindow) {
